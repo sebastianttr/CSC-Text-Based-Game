@@ -1,0 +1,44 @@
+.customLink {
+    position: absolute;
+    z-index: 1;
+    color: white;
+    height: 53px;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-left: 10px;
+    user-select: none;
+}
+
+.customLinkText {
+    position: relative;
+    font-size: 30px;
+    pointer-events: none;
+}
+
+.customLinkBackground {
+    position: absolute;
+    height: 5%;
+    width: 110%;
+    bottom: -5px;
+    left: -5%;
+    background-color: white;
+    transition: 0.3s;
+    z-index: -1;
+}
+
+.customLink:hover .customLinkBackground {
+    height: 150%;
+    background-color: white;
+    box-shadow: 0px 0px 10px 7px rgba(0, 0, 0, 0.15);
+    opacity: 1;
+}
+
+.customLink:active .customLinkBackground {
+    background-color: grey;
+    transition: 0.1s;
+}
+
+.customLink:hover {
+    color: black;
+    transition: 0.3s;
+}

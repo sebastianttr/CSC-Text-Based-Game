@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CSC - Stranded Alone</title>
+    <link rel="stylesheet" href="./styles/stylesheet.css">
+    <link rel="stylesheet" href="./styles/customButtonStyle.css">
+
+</head>
+
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/vue@latest/dist/vue.min.js"></script>
+    <script src="./components/CustomButton.js"></script>
+
+    <div id="app">
+        <div v-if="currentLevel == '0'">
+            <div class="interaction">
+                <div class="interactionTitel">
+                    <div>Stranded</div>
+                    <div id="aloneTextEffects" :style="`margin-left: 30px;opacity:${aloneTextOpacity}%;`">{{aloneText}}</div>
+                </div>
+                <div class="interactionDescription">Survive through the darkness in a forest of unknown entities</div>
+
+                <div class="interactionButton" v-on:click="setConsoleOutput()">
+                    <custom-buttom :title="'Start Game'"></custom-buttom>
+                </div>
+
+            </div>
+            <div class="background_img"></div>
+            <div class="creepyFigure"></div>
+            <div class="authorText">by Sebastian Tatar | BCC21</div>
+        </div>
+
+        <div v-if="currentLevel == 'A1'">
+            <div class="interaction">
+                <div class="interactionTitel">
+                    Dark Stranding
+                </div>
+
+            </div>
+
+            <div class="background_img"></div>
+        </div>
+
+        <div v-if="currentLevel == 'intermission'">
+            <div>Intermission</div>
+        </div>
+    </div>
+
+    <script defer src="./script.js"></script>
+
+</body>
+
+</html>
