@@ -17,7 +17,7 @@
     <script src="./src/components/CustomButton.js"></script>
 
     <div id="app">
-        <div v-if="currentLevel == '0'">
+        <div class="fade-in-image" v-if="currentLevel == '0'">
             <div class="interaction">
                 <div class="interactionTitel">
                     <div>Stranded</div>
@@ -25,7 +25,7 @@
                 </div>
                 <div class="interactionDescription">Survive through the darkness in a forest of unknown entities</div>
 
-                <div class="interactionButton" v-on:click="setConsoleOutput()">
+                <div class="interactionButton" v-on:click="startGame()">
                     <custom-buttom :title="'Start Game'"></custom-buttom>
                 </div>
 
@@ -35,23 +35,45 @@
             <div class="authorText">by Sebastian Tatar | BCC21</div>
         </div>
 
-        <div v-if="currentLevel == 'A1'">
-            <div class="interaction">
-                <div class="interactionTitel">
-                    Dark Stranding
-                </div>
-
+        <div class="fade-in intermission fade-out" v-else-if="currentLevel == 'intermission'">
+            <div class="intermissionText">
+                Ahh finally! After a long day of work, you get to drive home to meet with your family and sit down to relax ... or so was the plan before your car all of a sudden broke down in an area surrounded by forest. It is said, that the <b>SkØrsgard forest</b>                is haunted place and for years, people that have gone into the forest have never been seen again. Nobody has dared to explored this strange place ...
             </div>
 
-            <div class="background_img"></div>
+            <div v-on:click="setLevel('A1')">
+                <custom-buttom :title="'Continue'"></custom-buttom>
+            </div>
         </div>
 
-        <div v-if="currentLevel == 'intermission'">
-            <div>Intermission</div>
+        <div class="fade-in fade-out" v-else-if="currentLevel != 'intermission' || '0'">
+            <div class="levelSingleChoice">
+                <div class="levelText">{{currentLevelData.text}}</div>
+
+                <div v-if="currentLevelData.type == 'singleChoice'">
+
+                    <div v-for="choice in currentLevelData.choices">
+                        <div class="buttonFix" v-on:click="setLevel(choice.leadsTo)">
+                            <custom-buttom :title="choice.text"></custom-buttom>
+                        </div>
+                    </div>
+                </div>
+
+                <div v-else-if="currentLevelData.type == 'multipleChoice'">
+                    <div v-for="choice in currentLevelData.choices">
+                        <div class="buttonFix" v-on:click="setLevel(choice.leadsTo)">
+                            <custom-buttom :title="choice.text"></custom-buttom>
+                        </div>
+                    </div>
+                </div>
+
+
+                <img src="img/pic1.jpg" class="imgFullScreen">
+            </div>
+
         </div>
     </div>
 
-    <script defer src="./script.js"></script>
+    <script defer src="./src/script.js"></script>
 
 </body>
 

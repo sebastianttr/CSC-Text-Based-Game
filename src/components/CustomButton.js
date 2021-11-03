@@ -11,7 +11,6 @@ Vue.component('custom-buttom', {
                 <div class="q-pa-sm text-h5">
                    {{this.title}}
                 </div>
-                <div class="customLinkBackground"></div>
             </div>
         </div>
     `

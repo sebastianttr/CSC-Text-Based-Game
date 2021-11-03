@@ -29,6 +29,132 @@ const creepPositions = [{
 ]
 
 
+const levels = {
+    "A1": {
+        type: "singleChoice",
+        text: `Your check engine light has come on and the car slowly loses power. 
+        You stop at the side of the road and check the engine, only to see smoke coming out. 
+        But you cannot risk being in the forest. \n
+        \n
+        What will you do?`,
+        imgSrc: "img/pic1.jpg",
+        choices: [{
+                text: "Use your phone to call for help",
+                leadsTo: "A2"
+            },
+            {
+                text: "Walk around and look for a house",
+                leadsTo: "B1"
+            },
+            {
+                text: "Wait for passerby",
+                leadsTo: "X3"
+            }
+        ]
+    },
+    "A2": {
+        type: "singleChoice",
+        text: `
+            You cannot make phone calls because there is no signal.\n
+            What else could you do?
+        `,
+        imgSrc: "",
+        choices: [{
+                text: "Just out of curiosity, walk into the forest",
+                leadsTo: "X1"
+            },
+            {
+                text: "Walk around and look for a house",
+                leadsTo: "B1"
+            },
+            {
+                text: "Wait for passerby",
+                leadsTo: "X3"
+            }
+        ]
+    },
+    "B1": {
+        type: "multipleChoice",
+        text: `
+            Your are not sure wether your car is safe to be left alone.\n
+            What will you do?
+        `,
+        imgSrc: "",
+        choices: [{
+                text: "Turn of all the lights",
+                correct: true
+            },
+            {
+                text: "Lock the car",
+                correct: true
+            },
+            {
+                text: "Set a fire next to the car",
+                correct: false,
+                afterText: "You would't want to burn your car in these circumstances",
+            },
+            {
+                text: "Take some food with you",
+                correct: false,
+                afterText: "You don't need food ... it will not keep your car away from monsters"
+            }
+        ]
+    },
+    "B2": {
+        type: "singleChoice",
+        text: `You see a nice cabin in the woods. There seems to be somebody inside the cabin.\n 
+            What will you choose to do?
+        `,
+        imgSrc: "",
+        choices: [{
+                text: "Knock on the door",
+                leadsTo: "X2"
+            },
+            {
+                text: "Keep walking",
+                leadsTo: "B3"
+            }
+        ]
+    },
+    "B3": {
+        type: "multipleChoice",
+        text: `
+        You finally have a signal. What are the things you should do?
+        `,
+        imgSrc: "",
+        choices: [{
+                text: "Call a tow truck",
+                correct: true
+            },
+            {
+                text: "Call your family",
+                correct: true
+            },
+            {
+                text: "Play candy crush",
+                correct: false,
+                afterText: "Candy Crush? Really? ",
+            }
+        ]
+    },
+    "X1": {
+        type: "end",
+        text: "You have done what no sane person would do. Say goodbye to this world ...",
+        imgSrc: "",
+    },
+    "X2": {
+        type: "end",
+        text: "The lights go out and the doors open violently. An unknown man starts running towards. You are done. ",
+        imgSrc: "",
+    },
+    "X3": {
+        type: "end",
+        text: "Your family will be very worried. Not a good choice. ",
+        imgSrc: "",
+    }
+}
+
+
 const app = new Vue({
     el: "#app",
     data() {
@@ -38,11 +164,15 @@ const app = new Vue({
             aloneTextOpacity: 0,
             aloneTextTimelyInterval: null,
             creepMovingInterval: null,
+            storyLevels: levels
         };
     },
     methods: {
-        setConsoleOutput() {
-            console.log("Start the game.")
+        startGame() {
+            this.currentLevel = "intermission";
+        },
+        setLevel(lvl) {
+            this.currentLevel = lvl;
         },
         async deployAloneTextEffects() {
             await delay(500);
@@ -76,7 +206,7 @@ const app = new Vue({
 
             this.creepMovingInterval = setInterval(() => {
                 let visibile = Boolean(Math.round(Math.random()));
-                let index = Math.round(Math.random() * 4)
+                let index = Math.round(Math.random() * 3)
 
                 if (visibile) {
                     el.style.visibility = "visible";
@@ -87,6 +217,19 @@ const app = new Vue({
                     el.style.visibility = "hidden";
                 }
             }, 5000);
+        }
+    },
+    computed: {
+        currentLevelData() {
+            return this.storyLevels[this.currentLevel];
+        }
+    },
+    watch: {
+        currentLevel(newValue) {
+            if (newValue != "0") {
+                clearInterval(this.aloneTextTimelyInterval);
+                clearInterval(this.creepMovingInterval);
+            }
         }
     },
     beforeMount() {

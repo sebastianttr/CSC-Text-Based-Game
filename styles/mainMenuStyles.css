@@ -1,0 +1,53 @@
+.interaction {
+    margin: 30px;
+    position: absolute;
+    z-index: 1;
+}
+
+.interactionTitel {
+    font-family: "titlefont";
+    position: relative;
+    font-size: 100px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.interactionDescription {
+    font-size: 25px;
+    margin-bottom: 15px;
+}
+
+.interactionButton {
+    font-family: 'textfont';
+}
+
+.background_img {
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    margin-top: -3px;
+    background-image: url('../img/road_forest.jpg');
+    object-fit: fit;
+}
+
+.authorText {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    margin: 5px;
+    font-size: 15px;
+}
+
+.creepyFigure {
+    position: absolute;
+    background-image: url(./img/Project-removebg-preview.png);
+    color: red;
+    height: 250px;
+    width: 97px;
+    opacity: 0.5;
+    z-index: 1;
+    object-fit: fit;
+    visibility: hidden;
+}
