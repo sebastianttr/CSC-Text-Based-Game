@@ -28,6 +28,17 @@ const creepPositions = [{
     },
 ]
 
+const intermissionText1 = `
+Ahh finally! After a long day of work, you get to drive home to meet with your family and sit down to relax ... or so was the plan before your car all of a sudden broke down in an area surrounded by forest.
+`
+
+const intermissionText2 = `
+It is said, that the SkØrsgard forest is a haunted place and for years, people that have gone into the forest have never been seen again.
+`
+
+const intermissionText3 = `
+Nobody has dared to explored this strange place ...
+`
 
 const levels = {
     "A1": {
@@ -82,7 +93,7 @@ const levels = {
         imgSrc: "img/pic1.jpg",
         leadsTo: "B2",
         choices: [{
-                text: "Turn of all the lights",
+                text: "Turn off all the lights",
                 correct: true,
                 state: false,
                 afterText: "Leaving your lights on may attract unwanted visitors. \n Wrong Choice."
@@ -216,7 +227,6 @@ const app = new Vue({
                     this.aloneText = (currentRandom == 1) ? "alone" : "";
                     await delay(10);
                 }
-
                 this.aloneText = "alone"
             }, 15000);
         },
@@ -258,7 +268,41 @@ const app = new Vue({
         },
         rnd() {
             return Math.round(Math.random() * 3) + 1
+        },
+        async startIntermissionTypeWriter() {
+            await delay(300);
+            let el = document.getElementById("intermissionText");
+
+            //Run First text
+
+            for (let i = 0; i < intermissionText1.length; i++) {
+                if (this.currentLevel == "intermission") {
+                    el.innerHTML += intermissionText1.charAt(i)
+                    await delay(65);
+                } else break;
+            }
+
+            await delay(250);
+            el.innerHTML += "<br/><br/>"
+
+            for (let i = 0; i < intermissionText2.length; i++) {
+                if (this.currentLevel == "intermission") {
+                    el.innerHTML += intermissionText2.charAt(i)
+                    await delay(65);
+                } else break;
+            }
+
+            await delay(250);
+            el.innerHTML += "<br/><br/>"
+
+            for (let i = 0; i < intermissionText3.length; i++) {
+                if (this.currentLevel == "intermission") {
+                    el.innerHTML += intermissionText3.charAt(i)
+                    await delay(65);
+                } else break;
+            }
         }
+
     },
     computed: {
         currentLevelData() {
@@ -275,7 +319,6 @@ const app = new Vue({
                 case "B2":
                 case "B3":
                     if (this.audioObj.src != `${this.getCurrentAbsoluteURL()}audio/main.mp3`) {
-                        console.log("Not the same!")
                         this.audioObj.loop = true;
                         this.audioObj.src = "audio/main.mp3";
                         this.audioObj.play();
@@ -292,6 +335,9 @@ const app = new Vue({
                     this.audioObj.loop = false;
                     this.audioObj.src = "audio/success.mp3";
                     this.audioObj.play();
+                    break;
+                case 'intermission':
+                    this.startIntermissionTypeWriter();
                     break;
                 default:
                     clearInterval(this.aloneTextTimelyInterval);

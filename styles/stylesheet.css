@@ -294,3 +294,9 @@
     .intermissionImg {
         opacity: 0;
     }
+    
+    .lateDelay {
+        animation: fadeIn 1s;
+        animation-delay: 5s;
+        animation-fill-mode: forwards;
+    }
