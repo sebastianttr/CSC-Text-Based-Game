@@ -16,6 +16,23 @@
         src: url("../fonts/textfont.ttf")
     }
     
+    .audioButton {
+        position: fixed;
+        right: 1vw;
+        top: 0px;
+        background-color: rgba(0, 0, 0, 0.5);
+        padding-top: 1px;
+        width: 36px;
+        height: 36px;
+        border-radius: 36px;
+        cursor: pointer;
+        user-select: none;
+    }
+    
+    .material-icons.md-36 {
+        font-size: 36px;
+    }
+    
     .interaction {
         margin: 30px;
         position: absolute;
@@ -79,6 +96,10 @@
         -ms-animation: fadeIn 3s;
     }
     
+    .fade-in-fast {
+        animation: fadeIn 1s;
+    }
+    
     .fade-out {
         animation: fadeIn 3s;
         -webkit-animation: fadeIn 3s;
@@ -93,6 +114,15 @@
         }
         100% {
             opacity: 1;
+        }
+    }
+    
+    @keyframes fadeInOpacity {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 0.2;
         }
     }
     
@@ -125,6 +155,21 @@
         background-color: black;
     }
     
+    .endPage {
+        height: 100vh;
+        width: 100vw;
+        font-size: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+    
+    .endImg {
+        animation: fadeInOpacity 2s;
+        opacity: 0.2;
+    }
+    
     .imgFullScreen {
         position: absolute;
         top: 0;
@@ -135,20 +180,21 @@
         object-fit: cover;
     }
     
-    .levelSingleChoice {
+    .levels {
         height: 100%;
         width: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        font-size: 15px;
+        margin-top: 100px;
     }
     
     .levelText {
         margin-top: 15px;
-        font-size: 30px;
+        font-size: 35px;
         width: 60vw;
+        text-align: center;
     }
     
     .buttonFix {
@@ -157,6 +203,16 @@
         border-style: solid;
         border-width: 2px;
         border-color: antiquewhite;
+        text-align: center;
+    }
+    
+    .buttonFix2 {
+        position: inherit;
+        margin: 10px;
+        border-style: solid;
+        border-width: 2px;
+        border-color: antiquewhite;
+        text-align: center;
     }
     
     .intermissionText {
@@ -164,4 +220,77 @@
         font-size: 35px;
         width: 60vw;
         margin-bottom: 30px;
+    }
+    
+    .endButtons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+    
+    .multipleChoice {
+        margin-top: 10px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        color: white;
+    }
+    
+    .checkBox {
+        background-color: aliceblue;
+        color: black;
+        width: 40px;
+        height: 40px;
+        font-size: 35px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        user-select: none;
+        transition: 0.3s;
+    }
+    
+    .checkBox:hover {
+        background-color: wheat;
+        transition: 0.3s;
+    }
+    
+    .checkBoxText {
+        font-size: 35px;
+        margin-left: 15px;
+        cursor: pointer;
+        user-select: none;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+    
+    .success {
+        height: 100vh;
+        width: 100vw;
+        font-size: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+    
+    .successEndButtons {
+        opacity: 0;
+        display: flex;
+        justify-content: center;
+        align-items: stretch;
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .delayed {
+        animation: fadeIn 1s;
+        animation-delay: 2s;
+        animation-fill-mode: forwards;
+    }
+    
+    .intermissionImg {
+        opacity: 0;
     }

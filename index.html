@@ -9,7 +9,7 @@
     <title>CSC - Stranded Alone</title>
     <link rel="stylesheet" href="./styles/stylesheet.css">
     <link rel="stylesheet" href="./styles/customButtonStyle.css">
-
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
 <body>
@@ -17,8 +17,8 @@
     <script src="./src/components/CustomButton.js"></script>
 
     <div id="app">
-        <div class="fade-in-image" v-if="currentLevel == '0'">
-            <div class="interaction">
+        <div v-if="currentLevel == '0'">
+            <div class="fade-in interaction">
                 <div class="interactionTitel">
                     <div>Stranded</div>
                     <div id="aloneTextEffects" :style="`margin-left: 30px;opacity:${aloneTextOpacity}%;`">{{aloneText}}</div>
@@ -28,8 +28,8 @@
                 <div class="interactionButton" v-on:click="startGame()">
                     <custom-buttom :title="'Start Game'"></custom-buttom>
                 </div>
-
             </div>
+
             <div class="background_img"></div>
             <div class="creepyFigure"></div>
             <div class="authorText">by Sebastian Tatar | BCC21</div>
@@ -45,12 +45,49 @@
             </div>
         </div>
 
-        <div class="fade-in fade-out" v-else-if="currentLevel != 'intermission' || '0'">
-            <div class="levelSingleChoice">
+
+        <div v-else-if="currentLevel.startsWith('X')">
+            <div class="endPage">
+                <div class="intermissionText fade-in-fast">
+                    {{currentLevelData.text}}
+                </div>
+
+                <div class="endButtons fade-in-fast">
+                    <div class="buttonFix" v-on:click="setLevel('A1')">
+                        <custom-buttom :title="'Restart game'"></custom-buttom>
+                    </div>
+                    <div class="buttonFix" v-on:click="setLevel('0')">
+                        <custom-buttom :title="'Back to main menu'"></custom-buttom>
+                    </div>
+                </div>
+                <img :src="`img/wrongchoice${rnd()}.jpg`" class="imgFullScreen endImg">
+
+            </div>
+        </div>
+
+        <div v-else-if="currentLevel == 'success'">
+            <div class="success">
+                <h2 class="fade-in">You made it!</h2>
+
+                <div class="successEndButtons delayed">
+                    <div class="buttonFix2" v-on:click="setLevel('A1')">
+                        <custom-buttom :title="'Restart game'"></custom-buttom>
+                    </div>
+                    <div class="buttonFix2" v-on:click="setLevel('0')">
+                        <custom-buttom :title="'Back to main menu'"></custom-buttom>
+                    </div>
+                </div>
+
+                <img src="img/end.jpg" class="imgFullScreen fade-in">
+            </div>
+        </div>
+
+
+        <div v-else>
+            <div class="fade-in fade-out levels">
                 <div class="levelText">{{currentLevelData.text}}</div>
 
                 <div v-if="currentLevelData.type == 'singleChoice'">
-
                     <div v-for="choice in currentLevelData.choices">
                         <div class="buttonFix" v-on:click="setLevel(choice.leadsTo)">
                             <custom-buttom :title="choice.text"></custom-buttom>
@@ -60,17 +97,22 @@
 
                 <div v-else-if="currentLevelData.type == 'multipleChoice'">
                     <div v-for="choice in currentLevelData.choices">
-                        <div class="buttonFix" v-on:click="setLevel(choice.leadsTo)">
-                            <custom-buttom :title="choice.text"></custom-buttom>
+                        <div class="multipleChoice" v-on:click="choice.state = !choice.state">
+                            <div class="checkBox">
+                                <div>{{(choice.state?'X':' ')}}</div>
+                            </div>
+                            <div class="checkBoxText">{{choice.text}}</div>
                         </div>
                     </div>
+                    <div class="buttonFix" v-on:click="evaluateMultipleChoice(currentLevelData.choices,currentLevelData.leadsTo)">
+                        <custom-buttom :title="'Next'"></custom-buttom>
+                    </div>
                 </div>
-
-
-                <img src="img/pic1.jpg" class="imgFullScreen">
+                <img :src="currentLevelData.imgSrc" class="imgFullScreen">
             </div>
 
         </div>
+        <span class="audioButton material-icons md-36" v-on:click="volumeState = !volumeState">{{(volumeState)?'volume_up':'volume_off'}}</span>
     </div>
 
     <script defer src="./src/script.js"></script>

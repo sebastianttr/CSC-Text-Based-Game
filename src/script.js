@@ -37,7 +37,7 @@ const levels = {
         But you cannot risk being in the forest. \n
         \n
         What will you do?`,
-        imgSrc: "img/pic1.jpg",
+        imgSrc: "img/unattended_car.jpg",
         choices: [{
                 text: "Use your phone to call for help",
                 leadsTo: "A2"
@@ -58,7 +58,7 @@ const levels = {
             You cannot make phone calls because there is no signal.\n
             What else could you do?
         `,
-        imgSrc: "",
+        imgSrc: "img/nosignal.jpg",
         choices: [{
                 text: "Just out of curiosity, walk into the forest",
                 leadsTo: "X1"
@@ -76,36 +76,43 @@ const levels = {
     "B1": {
         type: "multipleChoice",
         text: `
-            Your are not sure wether your car is safe to be left alone.\n
+            You are not sure wether your car is safe to be left alone. 
             What will you do?
         `,
-        imgSrc: "",
+        imgSrc: "img/pic1.jpg",
+        leadsTo: "B2",
         choices: [{
                 text: "Turn of all the lights",
-                correct: true
+                correct: true,
+                state: false,
+                afterText: "Leaving your lights on may attract unwanted visitors. \n Wrong Choice."
             },
             {
                 text: "Lock the car",
-                correct: true
+                correct: true,
+                state: false,
+                afterText: "Never leave a car unlocked, unless you want it to be stolen. \n Wrong Choice."
             },
             {
                 text: "Set a fire next to the car",
                 correct: false,
-                afterText: "You would't want to burn your car in these circumstances",
+                afterText: "You wouldn't want to burn your car in these circumstances",
+                state: false
             },
             {
                 text: "Take some food with you",
                 correct: false,
-                afterText: "You don't need food ... it will not keep your car away from monsters"
+                afterText: "You don't need food ... it will not keep unwanted visitors away.",
+                state: false
             }
         ]
     },
     "B2": {
         type: "singleChoice",
-        text: `You see a nice cabin in the woods. There seems to be somebody inside the cabin.\n 
+        text: `You find a nice cabin in the woods. There seems to be somebody inside the cabin.\n 
             What will you choose to do?
         `,
-        imgSrc: "",
+        imgSrc: "img/forestcabin.jpg",
         choices: [{
                 text: "Knock on the door",
                 leadsTo: "X2"
@@ -121,36 +128,43 @@ const levels = {
         text: `
         You finally have a signal. What are the things you should do?
         `,
-        imgSrc: "",
+        imgSrc: "img/walk_into_the_forest.jpg",
+        leadsTo: "success",
         choices: [{
                 text: "Call a tow truck",
-                correct: true
+                correct: true,
+                state: false,
+                afterText: "You need to get your car working again ... Can't stay here for to long..."
             },
             {
                 text: "Call your family",
-                correct: true
+                correct: true,
+                state: false,
+                afterText: "You should really call your family..."
             },
             {
                 text: "Play candy crush",
                 correct: false,
                 afterText: "Candy Crush? Really? ",
+                state: false
             }
         ]
     },
     "X1": {
         type: "end",
         text: "You have done what no sane person would do. Say goodbye to this world ...",
-        imgSrc: "",
     },
     "X2": {
         type: "end",
-        text: "The lights go out and the doors open violently. An unknown man starts running towards. You are done. ",
-        imgSrc: "",
+        text: "The lights go out and the doors open violently. An unknown man starts running towards. It is Game Over.",
     },
     "X3": {
         type: "end",
-        text: "Your family will be very worried. Not a good choice. ",
-        imgSrc: "",
+        text: "You wouldn't want to be in this forest of unknown entities ... Not a good choice. ",
+    },
+    "XX": {
+        type: "end",
+        text: "placeholder",
     }
 }
 
@@ -164,7 +178,12 @@ const app = new Vue({
             aloneTextOpacity: 0,
             aloneTextTimelyInterval: null,
             creepMovingInterval: null,
-            storyLevels: levels
+            storyLevels: levels,
+            afterText: {},
+            choiceState: false,
+            volumeState: true,
+            audioObj: new Audio("audio/main.mp3"),
+
         };
     },
     methods: {
@@ -217,6 +236,28 @@ const app = new Vue({
                     el.style.visibility = "hidden";
                 }
             }, 5000);
+        },
+        evaluateMultipleChoice(choices, leadsTo) {
+            let falseStatePresent = false
+            for (choice of choices) {
+                if (choice.state != choice.correct) {
+                    falseStatePresent = true;
+
+                    this.currentLevel = "XX";
+                    this.storyLevels["XX"].text = choice.afterText;
+                }
+                choice.state = false;
+            }
+
+            if (!falseStatePresent) {
+                this.currentLevel = leadsTo
+            }
+        },
+        getCurrentAbsoluteURL() {
+            return `${window.location.href}`;
+        },
+        rnd() {
+            return Math.round(Math.random() * 3) + 1
         }
     },
     computed: {
@@ -226,10 +267,44 @@ const app = new Vue({
     },
     watch: {
         currentLevel(newValue) {
-            if (newValue != "0") {
-                clearInterval(this.aloneTextTimelyInterval);
-                clearInterval(this.creepMovingInterval);
+            switch (newValue) {
+                case "0":
+                case "A1":
+                case "A2":
+                case "B1":
+                case "B2":
+                case "B3":
+                    if (this.audioObj.src != `${this.getCurrentAbsoluteURL()}audio/main.mp3`) {
+                        console.log("Not the same!")
+                        this.audioObj.loop = true;
+                        this.audioObj.src = "audio/main.mp3";
+                        this.audioObj.play();
+                    }
+                    break;
+                case 'X1':
+                case 'X2':
+                case 'X3':
+                case 'XX':
+                    this.audioObj.src = "audio/wrongchoice.mp3";
+                    this.audioObj.play();
+                    break;
+                case 'success':
+                    this.audioObj.loop = false;
+                    this.audioObj.src = "audio/success.mp3";
+                    this.audioObj.play();
+                    break;
+                default:
+                    clearInterval(this.aloneTextTimelyInterval);
+                    clearInterval(this.creepMovingInterval);
+                    break;
             }
+
+        },
+        volumeState(newValue) {
+            if (!newValue) {
+                this.audioObj.muted = true;
+            } else this.audioObj.muted = false;
+
         }
     },
     beforeMount() {
@@ -237,6 +312,7 @@ const app = new Vue({
     },
     mounted() {
         this.deployCreepyGuyMoving();
+        this.audioObj.play();
     },
     beforeDestroy() {
         clearInterval(this.aloneTextTimelyInterval);
